@@ -33,7 +33,7 @@ where date(updated) = '2019-05-01'
 # print(df)
 
 
-def connect_redshift(query):
+def connect_redshift(query, query_params):
 
     product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}"\
                                 .format(dbname=REDSHIFT_CONFIG['dbname'],
@@ -46,7 +46,7 @@ def connect_redshift(query):
     except:
         print("Unable to connect to the database")
 
-    df = pd.read_sql(query, product)
+    df = pd.read_sql(query, product, params=query_params)
 
     return df
 
