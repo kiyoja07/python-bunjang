@@ -265,6 +265,8 @@ dmypy.json
 
 
 .idea/
+data-analysis/csv/
+*.csv
 
 data-analysis/config.py
 
