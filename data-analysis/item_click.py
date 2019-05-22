@@ -1,6 +1,7 @@
 
 from read_redshift import connect_redshift
 from datetime import *
+import csv
 
 
 def query_macro_hours_1(start_time, end_time):
@@ -51,3 +52,11 @@ start_time = '2019-03-01 00:00:00'
 end_time = '2019-03-01 23:59:59'
 
 query_macro_hours_1(start_time, end_time)
+
+
+
+
+
+
+
+
