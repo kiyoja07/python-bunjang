@@ -25,7 +25,7 @@ def connect_redshift(query, query_params):
     return df
 
 
-def connect_redshift_direct(query):
+def connect_redshift_without_macro(query):
 
     product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}"\
                                 .format(dbname=REDSHIFT_CONFIG['dbname'],

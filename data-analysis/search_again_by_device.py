@@ -28,3 +28,23 @@ if __name__ == "__main__":
      """
 
     run_query(query)
+
+import json
+from pandas.io.json import json_normalize
+
+
+def json_parsing(row):
+    try:
+
+        dic = json.loads(row)
+
+        buyer_uid = dic['buyer_uid']
+
+        return buyer_uid
+
+    except:
+        print('this row is error')
+
+
+df_bunp_test['buyer_uid'] = df_bunp['params'].apply(json_parsing)
+df_bunp_test
