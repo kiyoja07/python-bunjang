@@ -5,6 +5,7 @@ from datetime import *
 
 def run_query_redshift_without_macro(query, save_path):
 
+    print(query)
 
     result = connect_redshift_without_macro(query)
 
@@ -32,6 +33,8 @@ def run_query_redshift_macro_everyday(query, save_path, start_time, end_time):
         end_time = start_time + timedelta(days=1)
 
         query_params = {'start_time': start_time, 'end_time': end_time}
+
+        print(query)
 
         print(query_count, ' : ', start_time, ' ~ ', end_time)
 
