@@ -1,5 +1,4 @@
 from connect_db import connect_redshift_direct
-import pandas as pd
 import csv
 
 
