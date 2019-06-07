@@ -266,8 +266,6 @@ dmypy.json
 .vscode/
 
 
-query.py
-query_archive.py
 
 .idea/
 data-analysis/csv/
