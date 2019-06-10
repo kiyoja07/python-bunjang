@@ -3,8 +3,33 @@
 Query Archive
 """
 
+"""
+Query & Save Path
+"""
+
+# path to save
+save_path = 'csv/products.csv'
 
 
+# macro parameters
+# start_time = '2019-04-01 00:00:00'
+# end_time = '2019-05-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+-- 일별 등록, 판매, 삭제된 제품 수
+SELECT (CASE WHEN status = 0 THEN date_trunc('day', create_date) ELSE date_trunc('day', register_date) END) AS date_at, 
+    category_id, status,
+    count(DISTINCT id) AS product_num
+FROM product_info_for_stats
+WHERE create_date >= '2017-01-01 00:00:00' AND create_date <= '2019-05-01 00:00:00'
+GROUP BY 1, 2, 3
+
+
+"""
 
 
 
