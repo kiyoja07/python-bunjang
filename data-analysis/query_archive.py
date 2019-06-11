@@ -3,6 +3,8 @@
 Query Archive
 """
 
+
+
 """
 Query & Save Path
 """
@@ -21,15 +23,96 @@ save_path = 'csv/products.csv'
 query = """
 
 -- 일별 등록, 판매, 삭제된 제품 수
-SELECT (CASE WHEN status = 0 THEN date_trunc('day', create_date) ELSE date_trunc('day', register_date) END) AS date_at, 
+SELECT date_trunc('day', create_date) AS on_at,
+    (CASE WHEN status > 0 THEN date_trunc('day', register_date) ELSE NULL END) AS close_at, 
     category_id, status,
-    count(DISTINCT id) AS product_num
+    count(DISTINCT id) AS products
 FROM product_info_for_stats
 WHERE create_date >= '2017-01-01 00:00:00' AND create_date <= '2019-05-01 00:00:00'
-GROUP BY 1, 2, 3
+GROUP BY 1, 2, 3, 4
 
 
 """
+
+
+
+"""
+Query & Save Path
+"""
+
+# path to save
+save_path = 'csv/bunp_category_since_1807.csv'
+
+
+# macro parameters
+# start_time = '2019-04-01 00:00:00'
+# end_time = '2019-05-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+
+
+
+-- 전체 구매 데이터
+WITH bunp_all AS (
+SELECT seller_pid, date_trunc('day', updated_at) AS updated_at, seller_pid_price AS bunp_amount
+FROM bunjang_promise
+WHERE status = 4 AND seller_pid_price > 0 AND seller_pid_price < 3000000 AND 
+    updated_at >= '2017-01-01' AND updated_at < '2019-05-01'
+),
+-- 구매 상품의 카테고리 id, 18년 7월 1일 이후 등록된 상품만
+bunp_cate AS (
+SELECT category_id AS cate_id, a.updated_at, a.seller_pid, a.bunp_amount
+FROM bunp_all a
+JOIN product_info_for_stats p
+ON a.seller_pid = p.pid
+where create_date >= '2018-07-01 00:00:00'
+)
+
+
+--ㅡ구매 상품의 카테고리 이름
+SELECT c.category, c.name, b.updated_at, b.seller_pid, b.bunp_amount
+FROM bunp_cate b
+LEFT JOIN categories c
+ON b.cate_id = c.category
+
+
+
+"""
+
+
+
+
+"""
+Query & Save Path
+"""
+
+# path to save
+save_path = 'csv/keywords_1801_1806.csv'
+
+
+# macro parameters
+start_time = '2018-01-01 00:00:00'
+end_time = '2018-07-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+-- 일별 키워드별 검색 수
+SELECT date_trunc('day', updated) AS date_at, keyword, COUNT(id) AS search_num
+FROM item_search_log
+where updated >= %(start_time)s AND updated < %(end_time)s
+GROUP BY 1, 2
+
+"""
+
+
+
 
 
 
@@ -105,7 +188,7 @@ save_path = 'csv/bunp_category_detail.csv'
 query = """
 
 
-
+-- 구매 상품의 카테고리
 
 -- 전체 구매 데이터
 WITH bunp_all AS (
