@@ -1,5 +1,5 @@
 from connect_db import *
-from query import *
+from redshift_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
 
@@ -11,6 +11,8 @@ def run_query_redshift_without_macro(query, save_path):
     result = connect_redshift_without_macro(query)
 
     result.to_csv(save_path, index=False, mode='w', header=True)
+
+    # print(connect_redshift_without_macro.product_connection_string)
 
     print('query completed')
 
@@ -38,7 +40,7 @@ def run_query_redshift_macro_everyday(query, save_path, start_time, end_time):
         query_params = {'start_time': start_time, 'end_time': end_time}
 
 
-        print(query_count, ' : ', start_time, ' ~ ', end_time)
+        print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
 
         result = connect_redshift(query, query_params)
 
@@ -80,7 +82,7 @@ def run_query_redshift_macro_everymonth(query, save_path, start_time, end_time):
         query_params = {'start_time': start_time, 'end_time': end_time}
 
 
-        print(query_count, ' : ', start_time, ' ~ ', end_time)
+        print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
 
         result = connect_redshift(query, query_params)
 
@@ -103,9 +105,6 @@ def run_query_redshift_macro_everymonth(query, save_path, start_time, end_time):
 
 
 
-
-
-
 if __name__ == "__main__":
 
     try:
@@ -116,7 +115,6 @@ if __name__ == "__main__":
         try:
             # run_query_redshift_macro_everyday(query, save_path, start_time, end_time)
             run_query_redshift_macro_everymonth(query, save_path, start_time, end_time)
-
 
         except:
             print('FAIL, query could not run')
