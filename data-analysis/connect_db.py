@@ -18,12 +18,16 @@ def connect_redshift(query, query_params):
                                         port=REDSHIFT_CONFIG['port'],)
     try:
         product = psycopg2.connect(product_connection_string)
-    except:
-        print("Unable to connect to the database")
 
-    result = pd.read_sql(query, product, params=query_params)
+        result = pd.read_sql(query, product, params=query_params)
 
-    product.close()
+    # except:
+    #     print("Unable to connect to the database")
+
+
+    finally:
+        product.close()
+
 
     return result
 
@@ -38,12 +42,16 @@ def connect_redshift_without_macro(query):
                                         port=REDSHIFT_CONFIG['port'],)
     try:
         product = psycopg2.connect(product_connection_string)
-    except:
-        print("Unable to connect to the database")
 
-    result = pd.read_sql(query, product)
+        result = pd.read_sql(query, product)
 
-    product.close()
+    # except:
+    #     print("Unable to connect to the database")
+
+
+    finally:
+        product.close()
+
 
     return result
 
@@ -58,14 +66,16 @@ def connect_service_1(query, query_params):
                                      password=SERVICE_1_CONFIG['password'],
                                      db=SERVICE_1_CONFIG['dbname'],
                                      charset='utf8',
-                                     cursorclass=pymysql.cursors.DictCursor)
+                                     cursorclass=pymysql.cursors.DictCursor)  # DB를 조회한 결과를 column 명이 key 인 dictionary로 저장
 
-    except:
-        print("Unable to connect to the database")
+        result = pd.read_sql(query, connection, params=query_params)
 
-    result = pd.read_sql(query, connection, params=query_params)
+    # except:
+    #     print("Unable to connect to the database")
 
-    connection.close()
+
+    finally:
+        connection.close()
 
     return result
 
@@ -80,11 +90,14 @@ def connect_service_1_without_macro(query):
                                      charset='utf8',
                                      cursorclass=pymysql.cursors.DictCursor)
 
-    except:
-        print("Unable to connect to the database")
+        result = pd.read_sql(query, connection)
 
-    result = pd.read_sql(query, connection)
+    # except:
+    #     print("Unable to connect to the database")
 
-    connection.close()
+
+    finally:
+        connection.close()
+
 
     return result

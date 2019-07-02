@@ -1,3 +1,5 @@
+
+
 from connect_db import *
 from redshift_query import *
 from datetime import *
@@ -58,7 +60,7 @@ def run_query_redshift_macro_everyday(query, save_path, start_time, end_time):
 
 
 
-def run_query_redshift_macro_everymonth(query, save_path, start_time, end_time):
+def run_query_redshift_macro_everymonth(query, save_path, start_time, end_time, fraud_reported_test):
 
     # string -> datetime object
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
@@ -73,7 +75,7 @@ def run_query_redshift_macro_everymonth(query, save_path, start_time, end_time):
 
         end_time = start_time + relativedelta(months=1)
 
-        query_params = {'start_time': start_time, 'end_time': end_time}
+        query_params = {'start_time': start_time, 'end_time': end_time, 'fraud_reported_test': fraud_reported_test}
 
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at :', datetime.now().time())
 
@@ -109,7 +111,7 @@ if __name__ == "__main__":
 
         try:
             # run_query_redshift_macro_everyday(query, save_path, start_time, end_time)
-            run_query_redshift_macro_everymonth(query, save_path, start_time, end_time)
+            run_query_redshift_macro_everymonth(query, save_path, start_time, end_time, fraud_reported_test)
 
         except:
             print('FAIL, query could not run')
