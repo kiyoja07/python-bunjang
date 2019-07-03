@@ -4,6 +4,34 @@ Query Archive
 """
 
 
+"""
+DB : Redshift, PostgreSQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/pay_history.csv'
+
+# macro parameters
+# start_time = '2019-01-01 00:00:00'
+# end_time = '2019-03-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+SELECT mast.deposit_done_date, mast.buyer_id, item.seller_id, mast.total_price
+FROM (
+    SELECT id, deposit_done_date, buyer_id, total_price
+    FROM order_mast
+    WHERE order_status_cd = 'purchase_confirm' AND deposit_done_date IS NOT NULL
+) mast
+JOIN order_item item
+ON mast.id = item.order_mast_id
+"""
+
 
 
 """

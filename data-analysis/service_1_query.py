@@ -7,17 +7,15 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/review_er.csv'
+save_path = 'csv/block_uid.csv'
 
 
 # query to run
 query = """
 
-select case when f.uid is null then 'normal'
-	else 'black' end as is_black, n.writer_uid,
-	count(*) as review
-from user_review n
-left join (
+
+
+-- 차단 사용자 목록
 SELECT DISTINCT uid
 FROM 
 (
@@ -41,8 +39,5 @@ WHERE ud.`status` = 0
   AND dge.uid IS NULL
   AND blocked_udid.udid IS NOT NULL
 ) AS t
-) f
-on n.writer_uid = f.uid
-group by 1, 2
 
 """

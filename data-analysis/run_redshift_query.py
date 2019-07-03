@@ -6,13 +6,13 @@ from dateutil.relativedelta import relativedelta
 
 def run_query_redshift_without_macro(query, save_path):
 
-    result = connect_redshift_without_macro(query)
+    print('run at :', datetime.now().time())  # print start time
 
-    result.to_csv(save_path, index=False, mode='w', header=True)
+    result = connect_redshift_without_macro(query)  # run query
 
-    # print(connect_redshift_without_macro.product_connection_string)
+    result.to_csv(save_path, index=False, mode='w', header=True)  # save to csv
 
-    print('query completed')
+    print('query completed')  # print end message
 
     return True
 
@@ -35,15 +35,17 @@ def run_query_redshift_macro_everyday(query, save_path, start_time, end_time):
 
         query_params = {'start_time': start_time, 'end_time': end_time}
 
+        print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())  # print start time
 
-        print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
+        result = connect_redshift(query, query_params)  # run query
 
-        result = connect_redshift(query, query_params)
-
+        # save to csv
         if query_count == 0:
+
             result.to_csv(save_path, index=False, mode='w', header=True)
 
         else:
+
             result.to_csv(save_path, index=False, mode='a', header=False)
 
         start_time = end_time
