@@ -11,6 +11,61 @@ Query & Save Path
 
 
 # path to save
+save_path = 'csv/bunp_history.csv'
+
+# macro parameters
+# start_time = '2019-01-01 00:00:00'
+# end_time = '2019-03-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select b.updated_at, c.category, b.buyer_uid, b.seller_uid, b.seller_pid_price
+from bunjang_promise b
+join product_info_for_stats p
+on b.seller_pid = p.pid
+join categories c
+on p.category_id = c.category
+where b.status = 4 and b.seller_pid_price > 0
+
+"""
+
+
+
+"""
+DB : Redshift, PostgreSQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/bunp_history.csv'
+
+# macro parameters
+# start_time = '2019-01-01 00:00:00'
+# end_time = '2019-03-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+SELECT updated_at, buyer_uid, seller_uid, seller_pid_price
+FROM bunjang_promise
+WHERE status = 4 AND seller_pid_price > 0
+
+"""
+
+
+"""
+DB : Redshift, PostgreSQL
+Query & Save Path
+"""
+
+
+# path to save
 save_path = 'csv/pay_history.csv'
 
 # macro parameters

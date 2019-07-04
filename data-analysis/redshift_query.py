@@ -6,7 +6,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/bunp_history.csv'
+save_path = 'csv/categories.csv'
 
 # macro parameters
 # start_time = '2019-01-01 00:00:00'
@@ -17,8 +17,7 @@ save_path = 'csv/bunp_history.csv'
 # query to run
 query = """
 
-SELECT updated_at, buyer_uid, seller_uid, seller_pid_price
-FROM bunjang_promise
-WHERE status = 4 AND seller_pid_price > 0
+select *
+from categories
 
 """
