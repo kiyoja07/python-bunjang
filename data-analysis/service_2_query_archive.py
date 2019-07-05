@@ -1,24 +1,29 @@
 
 """
+Query Archive
+"""
+
+
+"""
 DB : Service 2, MySQL
 Query & Save Path
 """
 
 
 # path to save
-save_path = 'csv/help_reporter_frauder.csv'
+save_path = 'csv/help_uid.csv'
 
 
 # query to run
 query = """
 
--- 거래관련 상담센터 신고건의 신고자 및 대상자 uid
-select d.discussion_id, d.created_at, d.reporter_uid, i.value as fraud_uid
+-- 거래관련 신고건의 신고 대상 uid
+select distinct i.value
 from help_extra_info i
 join (
-    select discussion_id, created_at, created_by as reporter_uid
+    select discussion_id
     from help_discussion
-    where category_id in 
+    where status = 1 and category_id in 
         ('transaction',
         'transaction-bad-item',
         'transaction-bunpay',
@@ -36,3 +41,8 @@ on i.discussion_id = d.discussion_id
 where i.key_name = 'targetUid'
 
 """
+
+
+
+
+
