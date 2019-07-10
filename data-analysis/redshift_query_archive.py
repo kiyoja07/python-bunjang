@@ -58,13 +58,13 @@ save_path = 'csv/bunp_history_all.csv'
 # query to run
 query = """
 
-select b.updated_at, c.category, b.status, b.buyer_uid, b.seller_uid, b.seller_pid_price
+select b.created_at, c.category, b.status, b.buyer_uid, b.seller_uid, b.seller_pid_price
 from bunjang_promise b
-join product_info_for_stats p
+left join product_info_for_stats p
 on b.seller_pid = p.pid
-join categories c
+left join categories c
 on p.category_id = c.category
-where b.seller_pid_price > 0
+where b.seller_pid_price > 0 and b.created_at < '2019-07-01'
 
 """
 
