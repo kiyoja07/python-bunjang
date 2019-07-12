@@ -8,7 +8,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/bunp_history_all.csv'
+save_path = 'csv/registered_product.csv'
 
 # macro parameters
 # start_time = '2019-01-01 00:00:00'
@@ -19,12 +19,14 @@ save_path = 'csv/bunp_history_all.csv'
 # query to run
 query = """
 
-select b.created_at, c.category, b.status, b.buyer_uid, b.seller_uid, b.seller_pid_price
-from bunjang_promise b
-left join product_info_for_stats p
-on b.seller_pid = p.pid
-left join categories c
-on p.category_id = c.category
-where b.seller_pid_price > 0 and b.created_at < '2019-07-01'
+-- 최초 등록
+-- 월별 등록된 상품
+SELECT date_trunc('day', updated) AS registered_at, pid
+FROM product_register_history
+
 
 """
+
+# ---------------------------------------------------------------------------------
+
+

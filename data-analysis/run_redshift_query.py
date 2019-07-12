@@ -116,5 +116,7 @@ if __name__ == "__main__":
         except:
             print('FAIL, query could not run')
 
+    print('save_path : ', save_path)
+
 
 

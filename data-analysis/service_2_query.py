@@ -10,7 +10,8 @@ save_path = 'csv/help_reporter_frauder.csv'
 
 
 # query to run
-query = """
+query = \
+"""
 
 -- 거래관련 상담센터 신고건의 신고자 및 대상자 uid
 select d.discussion_id, d.created_at, d.reporter_uid, i.value as fraud_uid

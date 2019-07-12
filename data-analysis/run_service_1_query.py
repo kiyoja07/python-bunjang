@@ -6,9 +6,11 @@ from dateutil.relativedelta import relativedelta
 
 def run_query_service_1_without_macro(query, save_path):
 
-    result = connect_service_1_without_macro(query)
+    print('run at :', datetime.now().time())
 
-    result.to_csv(save_path, index=False, mode='w', header=True)
+    result = connect_service_1_without_macro(query)  # run query
+
+    result.to_csv(save_path, index=False, mode='w', header=True)  # save as csv
 
     print('query completed')
 
@@ -31,27 +33,21 @@ def run_query_service_1_macro_everymonth(query, save_path, start_time, end_time)
 
         end_time = start_time + relativedelta(months=1)
 
-        # start_time = datetime.strftime(start_time, "%Y-%m-%d %H:%M:%S")
-        # end_time = datetime.strftime(end_time, "%Y-%m-%d %H:%M:%S")
-
         query_params = {'start_time': start_time, 'end_time': end_time}
 
-
-
-
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at :', datetime.now().time())
-        print(query_params)
 
+        # run query
         result = connect_service_1(query, query_params)
 
-        print(result)
-
+        # save as csv
         if query_count == 0:
             result.to_csv(save_path, index=False, mode='w', header=True)
 
         else:
             result.to_csv(save_path, index=False, mode='a', header=False)
 
+        # update loop parameters
         start_time = end_time
 
         query_count += 1
@@ -66,7 +62,11 @@ if __name__ == "__main__":
 
     print(query)
 
-    run_query_service_1_without_macro(query, save_path)
+    # run_query_service_1_without_macro(query, save_path)
+
+    run_query_service_1_macro_everymonth(query, save_path, start_time, end_time)
+
+    print('save_path : ', save_path)
 
     # try:
     #     run_query_service_1_without_macro(query, save_path)

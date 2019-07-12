@@ -3,6 +3,42 @@
 Query Archive
 """
 
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/test.csv'
+
+
+# macro parameters
+start_time = '2019-01-01 00:00:00.000000'
+end_time = '2019-04-01 00:00:00.000000'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = \
+"""
+
+select *
+from user
+where join_date >= %(start_time)s AND join_date < %(end_time)s
+
+"""
+
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
 # path to save
 save_path = 'csv/changed_name_raw.csv'
 
@@ -16,10 +52,23 @@ save_path = 'csv/changed_name_raw.csv'
 # query to run
 query = """
 
-select date, uid
-from user_name_history
+
+select user.id, name.date as change_name_date, user.join_date
+from user_name_history as name
+left join user
+on name.uid = user.id
+where user.join_date <= '2019-06-30'
+
+union
+
+select user.id, name.date as change_name_date, user.join_date
+from user_name_history as name
+right join user
+on name.uid = user.id
+where user.join_date <= '2019-06-30'
 
 """
+
 
 
 
