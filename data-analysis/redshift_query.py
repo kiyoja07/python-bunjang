@@ -1,6 +1,8 @@
 
 
 
+
+
 """
 DB : Redshift, PostgreSQL
 Query & Save Path
@@ -8,7 +10,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/registered_product.csv'
+save_path = 'csv/sold_product.csv'
 
 # macro parameters
 # start_time = '2019-01-01 00:00:00'
@@ -19,14 +21,14 @@ save_path = 'csv/registered_product.csv'
 # query to run
 query = """
 
--- 최초 등록
--- 월별 등록된 상품
-SELECT date_trunc('day', updated) AS registered_at, pid
-FROM product_register_history
+-- 월별 예약, 삭제, 판매 완료된 제품
+-- status IN (1, 2, 3)
+SELECT distinct date_trunc('month', updated) AS sold_at, pid
+FROM product_status_change_log
+WHERE status IN (1, 2, 3)
+
 
 
 """
 
 # ---------------------------------------------------------------------------------
-
-

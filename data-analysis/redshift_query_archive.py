@@ -4,6 +4,76 @@ Query Archive
 """
 
 
+"""
+DB : Redshift, PostgreSQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/re_registered_product.csv'
+
+# macro parameters
+# start_time = '2019-01-01 00:00:00'
+# end_time = '2019-03-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+-- 월별 다시 판매 중으로 바꾼 상품
+-- status가 (1, 2, 3) -> 0
+SELECT distinct date_trunc('month', updated) AS re_registered_at, p.pid
+FROM product_status_change_log p
+JOIN (
+SELECT DATE_trunc('month', updated) AS sold_at, pid
+FROM product_status_change_log
+WHERE status IN (1, 2, 3)
+) s
+ON p.pid = s.pid AND DATE_trunc('month', p.updated)> s.sold_at AND p.status = 0
+
+
+"""
+
+# ---------------------------------------------------------------------------------
+
+
+
+"""
+DB : Redshift, PostgreSQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/re_sold_product.csv'
+
+# macro parameters
+# start_time = '2019-01-01 00:00:00'
+# end_time = '2019-03-01 00:00:00'
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+-- 판매 불가 status에서 다시 판매 불가 status로 바뀐 제품
+-- status가 (1, 2, 3) -> (1, 2, 3)
+SELECT distinct date_trunc('month', updated) AS re_sold_at, p.pid
+FROM product_status_change_log p
+JOIN (
+	SELECT DATE_trunc('month', updated) AS sold_at, pid
+	FROM product_status_change_log
+	WHERE status IN (1, 2, 3)
+) s
+ON p.pid = s.pid AND DATE_trunc('month', p.updated)> s.sold_at AND p.status IN (1, 2, 3)
+
+
+"""
+
+# ---------------------------------------------------------------------------------
+
 
 """
 DB : Redshift, PostgreSQL
@@ -25,13 +95,15 @@ query = """
 
 -- 최초 등록
 -- 월별 등록된 상품
-SELECT date_trunc('day', updated) AS registered_at, pid
+SELECT distinct date_trunc('month', updated) AS registered_at, pid
 FROM product_register_history
 
 
 """
 
 # ---------------------------------------------------------------------------------
+
+
 
 
 
