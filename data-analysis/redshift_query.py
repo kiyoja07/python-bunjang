@@ -13,11 +13,11 @@ Query & Save Path
 save_path = 'csv/test.csv'
 
 # macro parameters
-# start_time = '2019-01-01 00:00:00'
-# end_time = '2019-04-01 00:00:00'
+start_time = '2019-01-01 00:00:00'
+end_time = '2019-04-01 00:00:00'
 
-# interval_type = 'months'
-interval_type = None
+interval_type = 'months'
+# interval_type = None
 
 # updated >= %(start_time)s AND updated < %(end_time)s
 
@@ -26,7 +26,7 @@ query = """
 
 select id
 from user_join_log
-where updated = '2019-01-01'
+where updated >= %(start_time)s AND updated < %(end_time)s
 
 
 """

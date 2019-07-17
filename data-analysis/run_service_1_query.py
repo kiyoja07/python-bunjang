@@ -4,13 +4,28 @@ from datetime import *
 from dateutil.relativedelta import relativedelta
 
 
+
+def save_query_result(save_path, result, query_count):
+
+    if query_count == 0:
+        result.to_csv(save_path, index=False, mode='w', header=True)
+    else:
+        result.to_csv(save_path, index=False, mode='a', header=False)
+
+    return True
+
+
 def run_query_service_1_without_macro(query, save_path):
+
+    query_count = 0
 
     print('run at :', datetime.now().time())
 
-    result = connect_service_1_without_macro(query)  # run query
+    # run query
+    result = connect_service_1_without_macro(query)
 
-    result.to_csv(save_path, index=False, mode='w', header=True)  # save as csv
+    # save to csv
+    save_query_result(save_path, result, query_count)
 
     print('query completed')
 
@@ -18,38 +33,32 @@ def run_query_service_1_without_macro(query, save_path):
 
 
 
-def run_query_service_1_macro_everymonth(query, save_path, start_time, end_time):
+def run_query_service_1_macro(query, save_path, start_time, end_time, interval_type):
 
     # string -> datetime object
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
-    end = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
+    end_at = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
 
     query_count = 0
 
-    while True:
+    interval_num = 1
+    kwargs = {interval_type: interval_num}
 
-        if start_time >= end:
-            break
+    while start_time < end_at:
 
-        end_time = start_time + relativedelta(months=1)
-
-        query_params = {'start_time': start_time, 'end_time': end_time}
+        end_time = start_time + relativedelta(**kwargs)
 
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at :', datetime.now().time())
 
         # run query
+        query_params = {'start_time': start_time, 'end_time': end_time}
         result = connect_service_1(query, query_params)
 
-        # save as csv
-        if query_count == 0:
-            result.to_csv(save_path, index=False, mode='w', header=True)
-
-        else:
-            result.to_csv(save_path, index=False, mode='a', header=False)
+        # save to csv
+        save_query_result(save_path, result, query_count)
 
         # update loop parameters
         start_time = end_time
-
         query_count += 1
 
     print('query completed')
@@ -62,20 +71,17 @@ if __name__ == "__main__":
 
     print(query)
 
-    # run_query_service_1_without_macro(query, save_path)
+    try:
 
-    run_query_service_1_macro_everymonth(query, save_path, start_time, end_time)
+        if interval_type is None:
+            run_query_service_1_without_macro(query, save_path)
 
-    print('save_path : ', save_path)
+        else:
+            run_query_service_1_macro(query, save_path, start_time, end_time, interval_type)
 
-    # try:
-    #     run_query_service_1_without_macro(query, save_path)
-    #
-    # except:
-    #
-    #     try:
-    #         # run_query_redshift_macro_everyday(query, save_path, start_time, end_time)
-    #         run_query_service_1_macro_everymonth(query, save_path, start_time, end_time)
-    #
-    #     except:
-    #         print('FAIL, query could not run')
+        print('save_path : ', save_path)
+
+    except ValueError as e:
+        print(e)
+
+
