@@ -4,7 +4,6 @@ from datetime import *
 from dateutil.relativedelta import relativedelta
 
 
-
 def save_query_result(save_path, result, query_count):
 
     if query_count == 0:
@@ -15,15 +14,16 @@ def save_query_result(save_path, result, query_count):
     return True
 
 
-
 def run_query_redshift_without_macro(query, save_path):
 
     query_count = 0
+    query_params = None
 
     print('run at :', datetime.now().time())  # print start time
 
     # run query
-    result = connect_redshift_without_macro(query)
+    result = connect_redshift(query, query_params)
+    # result = connect_redshift_without_macro(query)
 
     # save to csv
     save_query_result(save_path, result, query_count)

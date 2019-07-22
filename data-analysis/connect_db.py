@@ -17,13 +17,13 @@ def connect_redshift(query, query_params):
                                         password=REDSHIFT_CONFIG['password'],
                                         port=REDSHIFT_CONFIG['port'],)
     try:
+
         product = psycopg2.connect(product_connection_string)
 
-        result = pd.read_sql(query, product, params=query_params)
-
-    # except:
-    #     print("Unable to connect to the database")
-
+        if query_params is None:
+            result = pd.read_sql(query, product)
+        else:
+            result = pd.read_sql(query, product, params=query_params)
 
     finally:
         product.close()
@@ -32,28 +32,51 @@ def connect_redshift(query, query_params):
     return result
 
 
-def connect_redshift_without_macro(query):
-
-    product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}"\
-                                .format(dbname=REDSHIFT_CONFIG['dbname'],
-                                        user=REDSHIFT_CONFIG['user'],
-                                        host=REDSHIFT_CONFIG['host'],
-                                        password=REDSHIFT_CONFIG['password'],
-                                        port=REDSHIFT_CONFIG['port'],)
-    try:
-        product = psycopg2.connect(product_connection_string)
-
-        result = pd.read_sql(query, product)
-
-    # except:
-    #     print("Unable to connect to the database")
 
 
-    finally:
-        product.close()
+# def connect_redshift(query, query_params):
+#
+#     product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}"\
+#                                 .format(dbname=REDSHIFT_CONFIG['dbname'],
+#                                         user=REDSHIFT_CONFIG['user'],
+#                                         host=REDSHIFT_CONFIG['host'],
+#                                         password=REDSHIFT_CONFIG['password'],
+#                                         port=REDSHIFT_CONFIG['port'],)
+#     try:
+#         product = psycopg2.connect(product_connection_string)
+#
+#         result = pd.read_sql(query, product, params=query_params)
+#
+#     # except:
+#     #     print("Unable to connect to the database")
+#
+#
+#     finally:
+#         product.close()
+#
+#
+#     return result
 
 
-    return result
+# def connect_redshift_without_macro(query):
+#
+#     product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}"\
+#                                 .format(dbname=REDSHIFT_CONFIG['dbname'],
+#                                         user=REDSHIFT_CONFIG['user'],
+#                                         host=REDSHIFT_CONFIG['host'],
+#                                         password=REDSHIFT_CONFIG['password'],
+#                                         port=REDSHIFT_CONFIG['port'],)
+#     try:
+#         product = psycopg2.connect(product_connection_string)
+#
+#         result = pd.read_sql(query, product)
+#
+#
+#     finally:
+#         product.close()
+#
+#
+#     return result
 
 
 # MYSQL
@@ -101,6 +124,7 @@ def connect_service_1_without_macro(query):
 
 
     return result
+
 
 
 def connect_service_2_without_macro(query):
