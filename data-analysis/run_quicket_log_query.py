@@ -1,5 +1,5 @@
 from connect_db import *
-from service_1_query import *
+from quicket_log_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
 
@@ -15,7 +15,7 @@ def save_query_result(save_path, result, query_count):
     return True
 
 
-def run_query_service_1_without_macro(query, save_path):
+def run_query_quicket_log_without_macro(query, save_path):
 
     query_count = 0
     query_params = None
@@ -23,7 +23,7 @@ def run_query_service_1_without_macro(query, save_path):
     print('run at :', datetime.now().time())
 
     # run query
-    result = connect_service_1(query, query_params)
+    result = connect_quicket_log(query, query_params)
     # result = connect_service_1_without_macro(query)
 
     # save to csv
@@ -35,11 +35,11 @@ def run_query_service_1_without_macro(query, save_path):
 
 
 
-def run_query_service_1_macro(query, save_path, start_time, end_time, interval_type):
+def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type):
 
     # string -> datetime object
-    start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
-    end_at = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
+    start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+    end_at = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
 
     query_count = 0
 
@@ -54,7 +54,7 @@ def run_query_service_1_macro(query, save_path, start_time, end_time, interval_t
 
         # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-        result = connect_service_1(query, query_params)
+        result = connect_quicket_log(query, query_params)
 
         # save to csv
         save_query_result(save_path, result, query_count)
@@ -76,14 +76,12 @@ if __name__ == "__main__":
     try:
 
         if interval_type is None:
-            run_query_service_1_without_macro(query, save_path)
+            run_query_quicket_log_without_macro(query, save_path)
 
         else:
-            run_query_service_1_macro(query, save_path, start_time, end_time, interval_type)
+            run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type)
 
         print('save_path : ', save_path)
 
     except ValueError as e:
         print(e)
-
-
