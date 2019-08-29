@@ -9,7 +9,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/product_registered.csv'
+save_path = 'csv/test.csv'
 
 # macro parameters
 # start_time = '2018-01-01 00:00:00'  # 이상
@@ -23,8 +23,8 @@ interval_type = None
 # query to run
 query = """
 
-select updated, pid
-from product_register_history
+select *
+from categories
 
 
 """

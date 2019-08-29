@@ -6,16 +6,18 @@ from dateutil.relativedelta import relativedelta
 
 
 def save_query_result(save_path, result, query_count):
+    """ 쿼리 결과를 csv로 저장 """
 
     if query_count == 0:
         result.to_csv(save_path, index=False, mode='w', header=True)
     else:
         result.to_csv(save_path, index=False, mode='a', header=False)
 
-    return True
+    return None
 
 
 def run_query_quicket_log_without_macro(query, save_path):
+    """ 매크로 없이 쿼리 실행 """
 
     query_count = 0
     query_params = None
@@ -31,11 +33,11 @@ def run_query_quicket_log_without_macro(query, save_path):
 
     print('query completed')
 
-    return True
-
+    return None
 
 
 def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type):
+    """ 기간 별로 매크로를 돌려서 쿼리 실행 """
 
     # string -> datetime object
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
@@ -65,8 +67,7 @@ def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval
 
     print('query completed')
 
-    return True
-
+    return None
 
 
 if __name__ == "__main__":
