@@ -6,7 +6,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/product_description.csv'
+save_path = 'csv/test_1.csv'
 
 # macro parameters
 # start_time = '2018-01-01 00:00:00'  # 이상
@@ -20,8 +20,9 @@ interval_type = None
 # query to run
 query = """
 
-select pid, 1 as description
-from product_description
+select *
+from categories
+
 
 """
 

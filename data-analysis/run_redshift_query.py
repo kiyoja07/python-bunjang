@@ -24,11 +24,12 @@ def run_query_redshift_without_macro(query, save_path):
     print('run at :', datetime.now().time())  # print start time
 
     # run query
-    result = connect_redshift(query, query_params)
-    # result = connect_redshift_without_macro(query)
 
-    # save to csv
-    save_query_result(save_path, result, query_count)
+    db_name = 'REDSHIFT'
+
+    result = connect_redshift(query, query_params, db_name)
+
+    save_query_result(save_path, result, query_count)  # save to csv
 
     print('query completed')  # print end message
 
@@ -55,7 +56,10 @@ def run_query_redshift_macro(query, save_path, start_time, end_time, interval_ty
 
         # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-        result = connect_redshift(query, query_params)
+
+        db_name = 'REDSHIFT'
+
+        result = connect_redshift(query, query_params, db_name)
 
         # save to csv
         save_query_result(save_path, result, query_count)
@@ -71,22 +75,22 @@ def run_query_redshift_macro(query, save_path, start_time, end_time, interval_ty
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     print(query)
 
     try:
-
         if interval_type is None:
             run_query_redshift_without_macro(query, save_path)
 
         else:
             run_query_redshift_macro(query, save_path, start_time, end_time, interval_type)
 
-        print('save_path : ', save_path)
-
-    except ValueError as e:
+    except Exception as e:
         print(e)
+
+    else:
+        print('save_path : ', save_path)
 
 
 

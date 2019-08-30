@@ -1,85 +1,39 @@
 #-*-coding:utf-8
 
 import pymysql
-import psycopg2
+from psycopg2 import connect
 import pandas as pd
 from config import REDSHIFT_CONFIG, SERVICE_1_CONFIG, SERVICE_2_CONFIG, QUICKET_LOG_CONFIG
 
-#
-# class ConnectSql:
-#
-#     def __init__(self, sql_type, query, params):
-#         self.sql_type = sql_type
-#         self.query = query
-#         self.params = params
-#
-#     def connect_info(self):
-#
-#         if sql_type == 'POSTGRESQL':
-#             dbname = REDSHIFT_CONFIG['dbname']
-#             user = REDSHIFT_CONFIG['user']
-#             host = REDSHIFT_CONFIG['host']
-#             password = REDSHIFT_CONFIG['password']
-#             port = REDSHIFT_CONFIG['port']
-#
-#             connection_info = {'dbname': dbname, 'user': user, 'host': host, 'password': password, 'port': port}
-#
-#             return connection_info
-#
-#     def read_query(self, product):
-#
-#         if params is None:
-#             result = pd.read_sql(self.query, product)
-#         else:
-#             result = pd.read_sql(self.query, product, self.params)
-#
-#         return result
-#
-#
-# query = None
-# params = None
-#
-# sql_type = 'POSTGRESQL'
-# config_info = ConnectSql.connect_info(sql_type)
-#
-# print(REDSHIFT_CONFIG['dbname'])
-# print(config_info)
-# print(config_info['dbname'])
 
+# class sql -> class postgresql, mysql
 
+class ConnectSql():
 
+    def __init__(self, db_name):
+        self.db_name = db_name
 
+    def connect_info(self):
 
-#
-#
-# def connect_redshift(query, query_params):
-# """ Redshift 연결 """
-#
-#     config_info = ConnectSql.connect_info(sql_type)
-#
-#     try:
-#         product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}" \
-#                                     .format(dbname=config_info.get('dbname'),
-#                                             user=REDSHIFT_CONFIG['user'],
-#                                             host=REDSHIFT_CONFIG['host'],
-#                                             password=REDSHIFT_CONFIG['password'],
-#                                             port=REDSHIFT_CONFIG['port'], )
-#
-#         product = psycopg2.connect(product_connection_string)
-#
-#         ConnectSql.read_query(product)
-#
-#     finally:
-#         product.close()
-#
-#     return result
-#
+        if self.db_name == 'REDSHIFT':
+            db_config = REDSHIFT_CONFIG
+        elif self.db_name == 'SERVICE_1':
+            db_config = SERVICE_1_CONFIG
+        elif self.db_name == 'SERVICE_2':
+            db_config = SERVICE_2_CONFIG
+        elif self.db_name == 'QUICKET_LOG':
+            db_config = QUICKET_LOG_CONFIG
 
+        dbname = db_config['dbname']
+        user = db_config['user']
+        host = db_config['host']
+        password = db_config['password']
+        port = db_config['port']
 
+        product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}" \
+                                    .format(dbname=dbname, user=user, host=host, password=password, port=port)
 
-
-# ------------------------------------------------------------
-
+        return product_connection_string
 
 
 def read_query(query, connection, query_params):
@@ -94,22 +48,24 @@ def read_query(query, connection, query_params):
 
 # POSTGRESQL
 
-def connect_redshift(query, query_params):
-# """ Redshift 연결 """
+def connect_redshift(query, query_params, db_name):
+
+    connection_string = ConnectSql(db_name).connect_info()
 
     try:
-        connection = psycopg2.connect(dbname=REDSHIFT_CONFIG['dbname'],
-                                      user=REDSHIFT_CONFIG['user'],
-                                      host=REDSHIFT_CONFIG['host'],
-                                      password=REDSHIFT_CONFIG['password'],
-                                      port=REDSHIFT_CONFIG['port'])
+        connection = connect(connection_string)
 
         result = read_query(query, connection, query_params)
+
+    except Exception as e:
+        print(e)
 
     finally:
         connection.close()
 
     return result
+
+
 
 
 # MYSQL
@@ -169,5 +125,4 @@ def connect_quicket_log(query, query_params):
         connection.close()
 
     return result
-
 

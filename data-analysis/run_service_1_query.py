@@ -83,7 +83,10 @@ if __name__ == "__main__":
 
         print('save_path : ', save_path)
 
-    except ValueError as e:
+    except Exception as e:
         print(e)
+
+    else:
+        print('save_path : ', save_path)
 
 
