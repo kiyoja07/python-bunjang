@@ -6,15 +6,12 @@ import pandas as pd
 from config import REDSHIFT_CONFIG, SERVICE_1_CONFIG, SERVICE_2_CONFIG, QUICKET_LOG_CONFIG
 
 
-# class sql -> class postgresql, mysql
-
-class ConnectSql():
+class FindSqlConfig:
 
     def __init__(self, db_name):
         self.db_name = db_name
 
-    def connect_info(self):
-
+    def find_db_config(self):
         if self.db_name == 'REDSHIFT':
             db_config = REDSHIFT_CONFIG
         elif self.db_name == 'SERVICE_1':
@@ -30,30 +27,62 @@ class ConnectSql():
         password = db_config['password']
         port = db_config['port']
 
-        product_connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}" \
-                                    .format(dbname=dbname, user=user, host=host, password=password, port=port)
+        config = {'dbname': dbname, 'user': user, 'host': host, 'password': password, 'port': port}
 
-        return product_connection_string
+        return config
+
+class ConnectPostgresql(FindSqlConfig):
+
+    def __init__(self, db_name):
+        super().__init__(db_name)
+
+    def connect_sql(self):
+        config = FindSqlConfig(self.db_name).find_db_config()
+
+        connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}" \
+                            .format(dbname=config['dbname'],
+                                    user=config['user'],
+                                    host=config['host'],
+                                    password=config['password'],
+                                    port=config['port'])
+
+        connection = connect(connection_string)
+
+        return connection
+
+
+class ConnectMysql(FindSqlConfig):
+
+    def __init__(self, db_name):
+        super().__init__(db_name)
+
+    def connect_sql(self):
+        config = FindSqlConfig(self.db_name).find_db_config()
+
+        connection = pymysql.connect(host=config['host'],
+                                     user=config['user'],
+                                     password=config['password'],
+                                     db=config['dbname'],
+                                     charset='utf8',
+                                     cursorclass=pymysql.cursors.DictCursor)  # DB를 조회한 결과를 column 명이 key 인 dictionary로 저장
+
+        return connection
 
 
 def read_query(query, connection, query_params):
 
-    if query_params is None:
-        query_result = pd.read_sql(query, connection)
-    else:
+    if query_params:
         query_result = pd.read_sql(query, connection, params=query_params)
+    else:
+        query_result = pd.read_sql(query, connection)
 
     return query_result
 
 
-# POSTGRESQL
-
 def connect_redshift(query, query_params, db_name):
 
-    connection_string = ConnectSql(db_name).connect_info()
-
     try:
-        connection = connect(connection_string)
+        connection = ConnectPostgresql(db_name).connect_sql()
 
         result = read_query(query, connection, query_params)
 
@@ -66,27 +95,21 @@ def connect_redshift(query, query_params, db_name):
     return result
 
 
-
-
-# MYSQL
-
-def connect_service_1(query, query_params):
-# """ Service 1 연결 """
+def connect_main_db(query, query_params, db_name):
 
     try:
-        connection = pymysql.connect(host=SERVICE_1_CONFIG['host'],
-                                     user=SERVICE_1_CONFIG['user'],
-                                     password=SERVICE_1_CONFIG['password'],
-                                     db=SERVICE_1_CONFIG['dbname'],
-                                     charset='utf8',
-                                     cursorclass=pymysql.cursors.DictCursor)  # DB를 조회한 결과를 column 명이 key 인 dictionary로 저장
+        connection = ConnectMysql(db_name).connect_sql()
 
         result = read_query(query, connection, query_params)
+
+    except Exception as e:
+        print(e)
 
     finally:
         connection.close()
 
     return result
+
 
 
 def connect_service_2_without_macro(query):
@@ -126,3 +149,17 @@ def connect_quicket_log(query, query_params):
 
     return result
 
+
+if __name__ == '__main__':
+
+    # test code
+
+    db_name = 'REDSHIFT'
+
+    db_name ='SERVICE_1'
+
+    connection = ConnectPostgresql(db_name).connect_sql()
+
+    connection.close()
+
+    print(connection)

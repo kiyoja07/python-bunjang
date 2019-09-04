@@ -1,4 +1,4 @@
-from connect_db import *
+from connect_db import connect_main_db
 from service_1_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
@@ -15,7 +15,7 @@ def save_query_result(save_path, result, query_count):
     return True
 
 
-def run_query_service_1_without_macro(query, save_path):
+def run_query_service_1_without_macro(query, save_path, db_name):
 
     query_count = 0
     query_params = None
@@ -23,8 +23,7 @@ def run_query_service_1_without_macro(query, save_path):
     print('run at :', datetime.now().time())
 
     # run query
-    result = connect_service_1(query, query_params)
-    # result = connect_service_1_without_macro(query)
+    result = connect_main_db(query, query_params, db_name)
 
     # save to csv
     save_query_result(save_path, result, query_count)
@@ -35,7 +34,7 @@ def run_query_service_1_without_macro(query, save_path):
 
 
 
-def run_query_service_1_macro(query, save_path, start_time, end_time, interval_type):
+def run_query_service_1_macro(query, save_path, start_time, end_time, interval_type, db_name):
 
     # string -> datetime object
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
@@ -54,7 +53,7 @@ def run_query_service_1_macro(query, save_path, start_time, end_time, interval_t
 
         # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-        result = connect_service_1(query, query_params)
+        result = connect_main_db(query, query_params, db_name)
 
         # save to csv
         save_query_result(save_path, result, query_count)
@@ -73,13 +72,15 @@ if __name__ == "__main__":
 
     print(query)
 
+    db_name = 'SERVICE_1'
+
     try:
 
         if interval_type is None:
-            run_query_service_1_without_macro(query, save_path)
+            run_query_service_1_without_macro(query, save_path, db_name)
 
         else:
-            run_query_service_1_macro(query, save_path, start_time, end_time, interval_type)
+            run_query_service_1_macro(query, save_path, start_time, end_time, interval_type, db_name)
 
         print('save_path : ', save_path)
 
@@ -87,6 +88,6 @@ if __name__ == "__main__":
         print(e)
 
     else:
-        print('save_path : ', save_path)
+        print('all process was completed')
 
 

@@ -15,7 +15,7 @@ def save_query_result(save_path, result, query_count):
     return None
 
 
-def run_query_redshift_without_macro(query, save_path):
+def run_query_redshift_without_macro(query, save_path, db_name):
     """ 매크로 없이 쿼리 실행 """
 
     query_count = 0
@@ -24,8 +24,6 @@ def run_query_redshift_without_macro(query, save_path):
     print('run at :', datetime.now().time())  # print start time
 
     # run query
-
-    db_name = 'REDSHIFT'
 
     result = connect_redshift(query, query_params, db_name)
 
@@ -37,7 +35,7 @@ def run_query_redshift_without_macro(query, save_path):
 
 
 
-def run_query_redshift_macro(query, save_path, start_time, end_time, interval_type):
+def run_query_redshift_macro(query, save_path, start_time, end_time, interval_type, db_name):
     """ 기간 별로 매크로를 돌려서 쿼리 실행 """
 
     start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
@@ -56,8 +54,6 @@ def run_query_redshift_macro(query, save_path, start_time, end_time, interval_ty
 
         # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-
-        db_name = 'REDSHIFT'
 
         result = connect_redshift(query, query_params, db_name)
 
@@ -79,18 +75,22 @@ if __name__ == '__main__':
 
     print(query)
 
+    db_name = 'REDSHIFT'
+
     try:
         if interval_type is None:
-            run_query_redshift_without_macro(query, save_path)
+            run_query_redshift_without_macro(query, save_path, db_name)
 
         else:
-            run_query_redshift_macro(query, save_path, start_time, end_time, interval_type)
+            run_query_redshift_macro(query, save_path, start_time, end_time, interval_type, db_name)
+
+        print('save_path : ', save_path)
 
     except Exception as e:
         print(e)
 
     else:
-        print('save_path : ', save_path)
+        print('all process was completed')
 
 
 
