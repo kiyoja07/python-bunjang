@@ -1,18 +1,13 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 from connect_db import connect_main_db
 from service_1_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
+from save_query_result import save_query_result
 
-
-
-def save_query_result(save_path, result, query_count):
-
-    if query_count == 0:
-        result.to_csv(save_path, index=False, mode='w', header=True)
-    else:
-        result.to_csv(save_path, index=False, mode='a', header=False)
-
-    return True
 
 
 def run_query_service_1_without_macro(query, save_path, db_name):
@@ -22,16 +17,13 @@ def run_query_service_1_without_macro(query, save_path, db_name):
 
     print('run at :', datetime.now().time())
 
-    # run query
-    result = connect_main_db(query, query_params, db_name)
+    result = connect_main_db(query, query_params, db_name)  # run query
 
-    # save to csv
-    save_query_result(save_path, result, query_count)
+    save_query_result(save_path, result, query_count)  # save to csv
 
     print('query completed')
 
-    return True
-
+    return None
 
 
 def run_query_service_1_macro(query, save_path, start_time, end_time, interval_type, db_name):
@@ -51,12 +43,11 @@ def run_query_service_1_macro(query, save_path, start_time, end_time, interval_t
 
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at :', datetime.now().time())
 
-        # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-        result = connect_main_db(query, query_params, db_name)
 
-        # save to csv
-        save_query_result(save_path, result, query_count)
+        result = connect_main_db(query, query_params, db_name)  # run query
+
+        save_query_result(save_path, result, query_count)  # save to csv
 
         # update loop parameters
         start_time = end_time
@@ -64,7 +55,7 @@ def run_query_service_1_macro(query, save_path, start_time, end_time, interval_t
 
     print('query completed')
 
-    return True
+    return None
 
 
 

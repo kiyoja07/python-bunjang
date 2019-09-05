@@ -271,6 +271,6 @@ dmypy.json
 data-analysis/csv/
 *.csv
 
-data-analysis/config.py
+data-analysis/run-sql/config.py
 
 # End of https://www.gitignore.io/api/macos,python,pycharm,jupyternotebook,visualstudiocode,jupyternotebooks

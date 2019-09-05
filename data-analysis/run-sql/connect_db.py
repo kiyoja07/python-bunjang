@@ -111,26 +111,6 @@ def connect_main_db(query, query_params, db_name):
     return result
 
 
-
-def connect_service_2_without_macro(query):
-# """ Service 2 연결 """
-
-    try:
-        connection = pymysql.connect(host=SERVICE_2_CONFIG['host'],
-                                     user=SERVICE_2_CONFIG['user'],
-                                     password=SERVICE_2_CONFIG['password'],
-                                     db=SERVICE_2_CONFIG['dbname'],
-                                     charset='utf8',
-                                     cursorclass=pymysql.cursors.DictCursor)
-
-        result = read_query(query, connection, query_params)
-
-    finally:
-        connection.close()
-
-    return result
-
-
 def connect_quicket_log(query, query_params):
 # """ quicket log 연결 """
 

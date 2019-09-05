@@ -1,19 +1,12 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 from connect_db import connect_redshift
 from redshift_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
-
-
-def save_query_result(save_path, result, query_count):
-    """ 쿼리 결과를 csv로 저장 """
-
-    if query_count == 0:
-        result.to_csv(save_path, index=False, mode='w', header=True)
-    else:
-        result.to_csv(save_path, index=False, mode='a', header=False)
-
-    return None
-
+from save_query_result import save_query_result
 
 def run_query_redshift_without_macro(query, save_path, db_name):
     """ 매크로 없이 쿼리 실행 """
@@ -23,9 +16,7 @@ def run_query_redshift_without_macro(query, save_path, db_name):
 
     print('run at :', datetime.now().time())  # print start time
 
-    # run query
-
-    result = connect_redshift(query, query_params, db_name)
+    result = connect_redshift(query, query_params, db_name)  # run query
 
     save_query_result(save_path, result, query_count)  # save to csv
 
@@ -52,13 +43,12 @@ def run_query_redshift_macro(query, save_path, start_time, end_time, interval_ty
 
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
 
-        # run query
+
         query_params = {'start_time': start_time, 'end_time': end_time}
 
-        result = connect_redshift(query, query_params, db_name)
+        result = connect_redshift(query, query_params, db_name)  # run query
 
-        # save to csv
-        save_query_result(save_path, result, query_count)
+        save_query_result(save_path, result, query_count)  # save to csv
 
         # update loop parameters
         start_time = end_time

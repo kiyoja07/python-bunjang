@@ -6,7 +6,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/test_1.csv'
+save_path = 'csv/test_3.csv'
 
 # macro parameters
 # start_time = '2018-01-01 00:00:00'  # 이상

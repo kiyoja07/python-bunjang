@@ -6,8 +6,10 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/help_no_ship.csv'
+save_path = '../../csv/test_1.csv'
 
+# interval_type = 'months'
+interval_type = None
 
 # query to run
 query = \
@@ -23,6 +25,7 @@ join (
 ) d
 on i.discussion_id = d.discussion_id
 where i.key_name = 'targetUid'
+limit 10
 
 """
 # ---------------------------------------------------------------------------------
