@@ -79,7 +79,7 @@ def read_query(query, connection, query_params):
     return query_result
 
 
-def connect_redshift(query, query_params, db_name):
+def connect_redshift(query, db_name, query_params=None):
 
     try:
         connection = ConnectPostgresql(db_name).connect_sql()
