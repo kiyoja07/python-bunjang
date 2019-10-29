@@ -111,23 +111,25 @@ def connect_main_db(query, query_params, db_name):
     return result
 
 
-def connect_quicket_log(query, query_params):
-# """ quicket log 연결 """
 
-    try:
-        connection = pymysql.connect(host=QUICKET_LOG_CONFIG['host'],
-                                     user=QUICKET_LOG_CONFIG['user'],
-                                     password=QUICKET_LOG_CONFIG['password'],
-                                     db=QUICKET_LOG_CONFIG['dbname'],
-                                     charset='utf8',
-                                     cursorclass=pymysql.cursors.DictCursor)
 
-        result = read_query(query, connection, query_params)
-
-    finally:
-        connection.close()
-
-    return result
+# def connect_quicket_log(query, query_params):
+# # """ quicket log 연결 """
+#
+#     try:
+#         connection = pymysql.connect(host=QUICKET_LOG_CONFIG['host'],
+#                                      user=QUICKET_LOG_CONFIG['user'],
+#                                      password=QUICKET_LOG_CONFIG['password'],
+#                                      db=QUICKET_LOG_CONFIG['dbname'],
+#                                      charset='utf8',
+#                                      cursorclass=pymysql.cursors.DictCursor)
+#
+#         result = read_query(query, connection, query_params)
+#
+#     finally:
+#         connection.close()
+#
+#     return result
 
 
 if __name__ == '__main__':

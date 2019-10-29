@@ -6,16 +6,14 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/first_message.csv'
+save_path = '../../csv/test_quicket_log.csv'
 
 # macro parameters
-start_time = '2019-01-01 00:00:00'  # 이상
-end_time = '2019-08-01 00:00:00'  # 미만
+start_time = '2019-01-01 00:00:00.0'  # 이상
+end_time = '2019-01-03 00:00:00.0'  # 미만
 
 interval_type = 'days'
 # interval_type = None
-
-# updated >= %(start_time)s AND updated < %(end_time)s
 
 
 # query to run

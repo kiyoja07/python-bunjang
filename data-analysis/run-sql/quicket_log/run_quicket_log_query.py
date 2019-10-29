@@ -1,19 +1,12 @@
-from connect_db import *
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from connect_db import connect_main_db
 from quicket_log_query import *
 from datetime import *
 from dateutil.relativedelta import relativedelta
-
-
-
-def save_query_result(save_path, result, query_count):
-    """ 쿼리 결과를 csv로 저장 """
-
-    if query_count == 0:
-        result.to_csv(save_path, index=False, mode='w', header=True)
-    else:
-        result.to_csv(save_path, index=False, mode='a', header=False)
-
-    return None
+from save_query_result import save_query_result
 
 
 def run_query_quicket_log_without_macro(query, save_path):
@@ -24,24 +17,21 @@ def run_query_quicket_log_without_macro(query, save_path):
 
     print('run at :', datetime.now().time())
 
-    # run query
-    result = connect_quicket_log(query, query_params)
-    # result = connect_service_1_without_macro(query)
+    result = connect_main_db(query, query_params, db_name)  # run query
 
-    # save to csv
-    save_query_result(save_path, result, query_count)
+    save_query_result(save_path, result, query_count)  # save to csv
 
     print('query completed')
 
     return None
 
 
-def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type):
+def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type, db_name):
     """ 기간 별로 매크로를 돌려서 쿼리 실행 """
 
     # string -> datetime object
-    start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
-    end_at = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
+    start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
+    end_at = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
 
     query_count = 0
 
@@ -54,12 +44,11 @@ def run_query_quicket_log_macro(query, save_path, start_time, end_time, interval
 
         print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at :', datetime.now().time())
 
-        # run query
         query_params = {'start_time': start_time, 'end_time': end_time}
-        result = connect_quicket_log(query, query_params)
 
-        # save to csv
-        save_query_result(save_path, result, query_count)
+        result = connect_main_db(query, query_params, db_name)  # run query
+
+        save_query_result(save_path, result, query_count)  # save to csv
 
         # update loop parameters
         start_time = end_time
@@ -74,15 +63,20 @@ if __name__ == "__main__":
 
     print(query)
 
+    db_name = 'QUICKET_LOG'
+
     try:
 
         if interval_type is None:
             run_query_quicket_log_without_macro(query, save_path)
 
         else:
-            run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type)
+            run_query_quicket_log_macro(query, save_path, start_time, end_time, interval_type, db_name)
 
         print('save_path : ', save_path)
 
-    except ValueError as e:
+    except Exception as e:
         print(e)
+
+    else:
+        print('all process was completed')
