@@ -6,11 +6,11 @@ Query & Save Path
 
 
 # path to save
-save_path = '../../csv/test_quicket_log.csv'
+save_path = '../../csv/chat_test.csv'
 
 # macro parameters
-start_time = '2019-01-01 00:00:00.0'  # 이상
-end_time = '2019-01-03 00:00:00.0'  # 미만
+start_time = '2019-10-22 00:00:00.0'  # 이상
+end_time = '2019-11-01 00:00:00.0'  # 미만
 
 interval_type = 'days'
 # interval_type = None
@@ -20,11 +20,12 @@ interval_type = 'days'
 query = \
 """
 
--- Daily 번개톡 최초 메시지 발송 수
-select date_format(update_time, '%%Y-%%m-%%d'), count(*)
+select distinct extras, channel_id
 from tb_message
-where message_no = 1 and
-	update_time >= %(start_time)s AND update_time < %(end_time)s
-group by 1
+where typecode= 12 and
+    update_time >= %(start_time)s AND update_time < %(end_time)s
 """
+
+
+
 # ---------------------------------------------------------------------------------

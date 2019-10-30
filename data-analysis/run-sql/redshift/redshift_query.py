@@ -9,7 +9,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/test.csv'
+save_path = 'csv/reward_test_chat.csv'
 
 
 # macro parameters
