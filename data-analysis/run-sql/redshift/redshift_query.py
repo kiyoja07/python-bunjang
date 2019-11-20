@@ -9,15 +9,17 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/reward_test_chat.csv'
+save_path = 'csv/click_1911.csv'
 
 
 # macro parameters
-# start_time = '2018-01-01 00:00:00'  # 이상
-# end_time = '2019-07-01 00:00:00'  # 미만
+start_time = '2019-11-01 00:00:00'  # 이상
+end_time = '2019-11-08 00:00:00'  # 미만
 
+
+# interval_type = None
+interval_type = 'days'
 # interval_type = 'months'
-interval_type = None
 
 
 # updated >= %(start_time)s AND updated < %(end_time)s
@@ -25,8 +27,9 @@ interval_type = None
 # query to run
 query = """
 
-select *
-from categories
+select updated, target_id, keyword
+from item_click_log6
+where updated >= %(start_time)s and updated < %(end_time)s
 
 
 """
