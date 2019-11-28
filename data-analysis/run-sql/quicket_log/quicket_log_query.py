@@ -6,11 +6,11 @@ Query & Save Path
 
 
 # path to save
-save_path = '../../csv/reward_test_chat.csv'
+save_path = '../../csv/reward_test_chat_1107_1120.csv'
 
 # macro parameters
-start_time = '2019-10-22 00:00:00.0'  # 이상
-end_time = '2019-11-01 00:00:00.0'  # 미만
+start_time = '2019-11-07 00:00:00.0'  # 이상
+end_time = '2019-11-21 00:00:00.0'  # 미만
 
 interval_type = 'days'
 # interval_type = None

@@ -5,6 +5,200 @@ Query Archive
 
 
 
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/reward_test_up_1022_1031.csv'
+
+# macro parameters
+# start_time = '2019-10-22 00:00:00.0'  # 이상
+# end_time = '2019-11-01 00:00:00.0'  # 미만
+
+interval_type = None
+# interval_type = 'days'
+# interval_type = 'months'
+
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select p.uid, p.pid, u.register_at
+from (
+    select u.uid, p.id as pid
+    from (
+        select distinct u.id as uid
+        from user u
+        where u.status = 0 # 탈퇴 유저 제외
+            and u.join_date between '2019-10-21 00:00:00' and '2019-10-23 23:59:59' # 이벤트 대상 가입일
+    ) u
+    join product_info p
+    on u.uid = p.uid
+    where p.create_date between '2019-10-22 00:00:00' and '2019-10-31 23:59:59' # 상품 등록 기간
+) p
+join up_count_history u
+on p.pid = u.pid
+
+
+"""
+
+
+
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/reward_test_bunp_1114_1120.csv'
+
+# macro parameters
+start_time = '2019-11-14 00:00:00.0'  # 이상
+end_time = '2019-11-21 00:00:00.0'  # 미만
+
+# interval_type = None
+interval_type = 'days'
+# interval_type = 'months'
+
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select channel_id, seller_uid, buyer_uid, seller_pid, created_at
+from bunjang_promise
+where created_at >= %(start_time)s AND created_at < %(end_time)s
+
+
+"""
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/reward_test_share_191022_191120.csv'
+
+# macro parameters
+# start_time = '2019-10-22 00:00:00.0'  # 이상
+# end_time = '2019-11-01 00:00:00.0'  # 미만
+
+interval_type = None
+# interval_type = 'days'
+# interval_type = 'months'
+
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select u.uid, s.date, s.pid, s.type
+from (
+    select distinct u.id as uid
+    from user u
+    where u.status = 0 # 탈퇴 유저 제외
+        and u.join_date between '2019-10-21 00:00:00' and '2019-10-23 23:59:59' # 이벤트 대상 가입일
+) u
+join shared_log s
+on u.uid = s.sharer_uid
+where s.date between '2019-10-22 00:00:00' and '2019-11-20 23:59:59' # 공유 기간
+
+
+"""
+
+
+
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/reward_test_product_191114_191120.csv'
+
+# macro parameters
+# start_time = '2019-10-22 00:00:00.0'  # 이상
+# end_time = '2019-11-01 00:00:00.0'  # 미만
+
+interval_type = None
+# interval_type = 'days'
+# interval_type = 'months'
+
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select u.uid, p.create_date, p.id as pid
+from (
+    select distinct u.id as uid
+    from user u
+    where u.status = 0 # 탈퇴 유저 제외
+        and u.join_date between '2019-10-21 00:00:00' and '2019-10-23 23:59:59' # 이벤트 대상 가입일
+) u
+join product_info p
+on u.uid = p.uid
+where p.create_date between '2019-11-14 00:00:00' and '2019-11-20 23:59:59' # 상품 등록 기간
+
+
+"""
+
+
+
+"""
+DB : Service 1, MySQL
+Query & Save Path
+"""
+
+
+# path to save
+save_path = 'csv/product_keyword_1911.csv'
+
+# macro parameters
+# start_time = '2019-10-22 00:00:00.0'  # 이상
+# end_time = '2019-11-01 00:00:00.0'  # 미만
+
+interval_type = None
+# interval_type = 'days'
+# interval_type = 'months'
+
+
+# updated >= %(start_time)s AND updated < %(end_time)s
+
+# query to run
+query = """
+
+select id as pid, create_date, keyword
+from product_info
+where create_date between '2019-11-01 00:00:00' and '2019-11-07 23:59:59'
+
+"""
+
+
+
+
+
+
+
 """
 DB : Service 1, MySQL
 Query & Save Path
