@@ -10,7 +10,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/reward_test_up_1022_1031.csv'
+save_path = 'csv/reward_register_2.0_all_user.csv'
 
 # macro parameters
 # start_time = '2019-10-22 00:00:00.0'  # 이상
@@ -26,9 +26,9 @@ interval_type = None
 # query to run
 query = """
 
-select
-from product_info
-where 
+select date_format(u.join_date, '%Y-%m-%d') as join_date, u.id as uid
+from user u
+where date_format(u.join_date, '%Y-%m-%d') in ('2019-12-04', '2019-12-05', '2019-12-08')
 
 
 """
