@@ -9,7 +9,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/bunp_191101_191130.csv'
+save_path = 'csv/pid_uid_191013_191116.csv'
 
 
 # macro parameters
@@ -27,15 +27,11 @@ interval_type = None
 # query to run
 query = """
 
-select b.updated_at, b.status as bunp_status, b.seller_pid as pid
-from (
-select pid
-from product_register_history
-where updated between '2019-11-01 00:00:00' and '2019-11-07 23:59:59'
-) p
-join bunjang_promise b
-on p.pid = b.seller_pid
-where b.updated_at between '2019-11-01 00:00:00' and '2019-11-30 23:59:59'
+select date_trunc('day', p.create_date) as register_date, p.pid, p.uid, p.device, u.bizlicense
+from product_info_for_stats p
+join user_for_stats u
+on p.uid = u.uid
+where p.create_date between '2019-10-13 00:00:00' and '2019-11-16 23:59:59'
 
 
 """
