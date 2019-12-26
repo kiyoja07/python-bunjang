@@ -9,7 +9,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/pid_uid_191013_191116.csv'
+save_path = 'csv/pid_uid_191117_191221.csv'
 
 
 # macro parameters
@@ -31,7 +31,7 @@ select date_trunc('day', p.create_date) as register_date, p.pid, p.uid, p.device
 from product_info_for_stats p
 join user_for_stats u
 on p.uid = u.uid
-where p.create_date between '2019-10-13 00:00:00' and '2019-11-16 23:59:59'
+where p.create_date between '2019-11-17 00:00:00' and '2019-12-21 23:59:59'
 
 
 """

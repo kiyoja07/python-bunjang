@@ -10,7 +10,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/pid_name_191013_191116.csv'
+save_path = 'csv/ad_point_191013_191221.csv'
 
 # macro parameters
 # start_time = '2019-10-22 00:00:00.0'  # 이상
@@ -26,9 +26,10 @@ interval_type = None
 # query to run
 query = """
 
-select id as pid, name
-from product_info
-where create_date between '2019-10-13 00:00:00' and '2019-11-16 23:59:59'
+select date_format(updated,'%Y-%m-%d') as date, uid, sum(price) as price
+from sponsor_transaction_log
+where status = 0 and updated between '2019-10-13 00:00:00' and '2019-12-21 23:59:59'
+group by 1, 2
 
 
 """
