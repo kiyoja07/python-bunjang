@@ -9,7 +9,7 @@ Query & Save Path
 
 
 # path to save
-save_path = 'csv/pid_uid_191117_191221.csv'
+save_path = 'csv/reward_pay_1.0_bunp.csv'
 
 
 # macro parameters
@@ -27,11 +27,9 @@ interval_type = None
 # query to run
 query = """
 
-select date_trunc('day', p.create_date) as register_date, p.pid, p.uid, p.device, u.bizlicense
-from product_info_for_stats p
-join user_for_stats u
-on p.uid = u.uid
-where p.create_date between '2019-11-17 00:00:00' and '2019-12-21 23:59:59'
+select channel_id, seller_uid, buyer_uid, seller_pid, created_at
+from bunjang_promise
+where created_at >= '2019-12-18 00:00:00' AND created_at < '2020-01-04 00:00:00'
 
 
 """
