@@ -1,9 +1,9 @@
 #-*-coding:utf-8
 
 import pymysql
-from psycopg2 import connect
+import psycopg2
 import pandas as pd
-from config import REDSHIFT_CONFIG, SERVICE_1_CONFIG, SERVICE_2_CONFIG, QUICKET_LOG_CONFIG
+from config import *
 
 
 class FindSqlConfig:
@@ -20,6 +20,8 @@ class FindSqlConfig:
             db_config = SERVICE_2_CONFIG
         elif self.db_name == 'QUICKET_LOG':
             db_config = QUICKET_LOG_CONFIG
+        elif self.db_name == 'BUN_DW':
+            db_config = BUN_DW_CONFIG
 
         dbname = db_config['dbname']
         user = db_config['user']
@@ -39,14 +41,11 @@ class ConnectPostgresql(FindSqlConfig):
     def connect_sql(self):
         config = FindSqlConfig(self.db_name).find_db_config()
 
-        connection_string = "dbname={dbname} user={user} host={host} password={password} port={port}" \
-                            .format(dbname=config['dbname'],
-                                    user=config['user'],
-                                    host=config['host'],
-                                    password=config['password'],
-                                    port=config['port'])
-
-        connection = connect(connection_string)
+        connection = psycopg2.connect(dbname=config['dbname'],
+                                      host=config['host'],
+                                      user=config['user'],
+                                      password=config['password'],
+                                      port=config['port'])
 
         return connection
 
@@ -95,6 +94,23 @@ def connect_redshift(query, db_name, query_params=None):
     return result
 
 
+def connect_postgresql(query, db_name, query_params=None):
+
+    try:
+        connection = ConnectPostgresql(db_name).connect_sql()
+
+        result = read_query(query, connection, query_params)
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        connection.close()
+
+    return result
+
+
+
 def connect_main_db(query, query_params, db_name):
 
     try:
@@ -138,7 +154,7 @@ if __name__ == '__main__':
 
     db_name = 'REDSHIFT'
 
-    db_name ='SERVICE_1'
+    db_name ='BUN_DW'
 
     connection = ConnectPostgresql(db_name).connect_sql()
 
