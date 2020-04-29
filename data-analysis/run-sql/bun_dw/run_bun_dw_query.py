@@ -12,7 +12,7 @@ from save_query_result import save_query_result
 def run_query_bun_dw_without_macro(query, save_path, db_name):
     """ 매크로 없이 쿼리 실행 """
 
-    print('run at :', datetime.now().time())  # print start time
+    print('run at : {current_time}'.format(current_time = datetime.now().time()))  # print start time
 
     result = connect_postgresql(query, db_name)  # run query
 
@@ -59,15 +59,12 @@ if __name__ == '__main__':
     db_name = 'BUN_DW'
 
     try:
-
         if interval_type:
             run_query_bun_dw_macro(query, save_path, db_name, start_time, end_time, interval_type)
-
         else:
             run_query_bun_dw_without_macro(query, save_path, db_name)
 
-        print('query completed')
-        print('save_path : ', save_path)
+        print('query completed', f'save_path : {save_path}', sep='\n')
 
     except Exception as e:
         print(e)
