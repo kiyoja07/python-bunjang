@@ -11,13 +11,9 @@ from save_query_result import save_query_result
 
 def run_query_bun_dw_without_macro(query, save_path, db_name):
     """ 매크로 없이 쿼리 실행 """
-
     print('run at : {current_time}'.format(current_time = datetime.now().time()))  # print start time
-
     result = connect_postgresql(query, db_name)  # run query
-
     save_query_result(save_path, result)  # save to csv
-
     return None
 
 
@@ -37,8 +33,8 @@ def run_query_bun_dw_macro(query, save_path, db_name, start_time, end_time, inte
 
         end_time = start_time + relativedelta(**kwargs)
 
-        print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
-
+        # print(query_count, ' : ', start_time, ' ~ ', end_time, ' , run at : ', datetime.now().time())
+        print(f'{query_count} : {start_time} ~ {end_time}, run at : {datetime.now().time()}')
         query_params = {'start_time': start_time, 'end_time': end_time}
 
         result = connect_postgresql(query, db_name, query_params)  # run query
@@ -55,7 +51,6 @@ def run_query_bun_dw_macro(query, save_path, db_name, start_time, end_time, inte
 if __name__ == '__main__':
 
     print(query)
-
     db_name = 'BUN_DW'
 
     try:
@@ -63,12 +58,9 @@ if __name__ == '__main__':
             run_query_bun_dw_macro(query, save_path, db_name, start_time, end_time, interval_type)
         else:
             run_query_bun_dw_without_macro(query, save_path, db_name)
-
         print('query completed', f'save_path : {save_path}', sep='\n')
-
     except Exception as e:
         print(e)
-
     else:
         print('all process was completed')
 
