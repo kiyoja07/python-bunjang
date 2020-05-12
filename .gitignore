@@ -269,6 +269,8 @@ dmypy.json
 
 .idea/
 data-analysis/csv/
+data-analysis/search_named_entity/csv/
+.csv/
 *.csv
 
 data-analysis/run-sql/config.py
