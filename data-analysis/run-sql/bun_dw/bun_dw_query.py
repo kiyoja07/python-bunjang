@@ -7,7 +7,7 @@ Query & Save Path
 
 
 # path to save
-save_path = '../../csv/search_click_200419_200425.csv'
+save_path = '../../csv/search_click_200501_200510.csv'
 
 
 # macro parameters
@@ -25,15 +25,15 @@ interval_type = None
 # query to run
 query = """
 
-select v.ref_term, c.name, count(v.content_id) as click
+select v.ref_term, c.category, c.name, count(v.content_id) as click
 from bun_log_db.app_event_type_view v
 join service1_quicket.product_info p
 on v.content_id = p.id
 join service1_quicket.categories c
-on left(p.category_id, 3) = c.category
-where year||month||day between '20200419' and '20200425'
+on p.category_id = c.category
+where year||month||day between '20200501' and '20200510'
     and v.ref_term is not null
-group by 1, 2
+group by 1, 2, 3
 order by click desc
 
 """
